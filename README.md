@@ -24,4 +24,4 @@ This figure was done using Cytoscape
 # Figure 5E
 human_comparison.R
 
-The generated figures were edited using Illustrator for better display
+The programatically generated figures were improved using Illustrator
