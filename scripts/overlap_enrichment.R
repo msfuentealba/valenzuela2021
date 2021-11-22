@@ -1,6 +1,11 @@
 library(tidyverse)
+library(GeneOverlap)
+library(RColorBrewer)
 library(circlize)
 library(ComplexHeatmap)
+library(STRINGdb)
+library(ggvenn)
+library(ggpubr)
 
 en <- read_tsv("./data/overlap_enrichment.tsv")
 en <- en %>% filter(`background gene count`<1000)

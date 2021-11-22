@@ -1,7 +1,11 @@
 library(tidyverse)
+library(GeneOverlap)
 library(RColorBrewer)
 library(circlize)
 library(ComplexHeatmap)
+library(STRINGdb)
+library(ggvenn)
+library(ggpubr)
 
 data <- read_rds("./data/differential_abundance.rds")
 data <- data[!grepl("Krt",data$symbol),]
@@ -11,10 +15,9 @@ mat$symbol <- NULL
 mat <- mat %>% dplyr::select(g3_g1,g2_g1,g4_g2)
 
 r <- cor(mat, method = "s")
-cor.test(mat$g3_g1,mat$g2_g1, method = "s")$p.value # r = 0.3
-cor.test(mat$g2_g1,mat$g4_g2, method = "s")$p.value # r = 0.3
-cor.test(mat$g3_g1,mat$g4_g2, method = "s")$p.value # r = 0.3
-
+cor.test(mat$g3_g1,mat$g2_g1, method = "s")$p.value 
+cor.test(mat$g2_g1,mat$g4_g2, method = "s")$p.value 
+cor.test(mat$g3_g1,mat$g4_g2, method = "s")$p.value 
 
 col_fun <- colorRamp2(seq(-1,1,2/10),rev(brewer.pal(11, "RdBu")))
 min(mat)

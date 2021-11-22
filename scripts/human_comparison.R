@@ -1,11 +1,18 @@
 library(tidyverse)
+library(GeneOverlap)
+library(RColorBrewer)
+library(circlize)
+library(ComplexHeatmap)
+library(STRINGdb)
+library(ggvenn)
+library(ggpubr)
+
 orto <- read_rds("./data/ortologues_human_mouse.rds")[,3:4] %>% na.omit %>% unique %>% set_names(c("symbol","mouse"))
 
 hump <- readxl::read_xlsx("./data/humphrey_2021.xlsx", sheet = 3, skip = 1)[,c(1,3,7,11)]
 hump$cervical.lfc <- as.numeric(hump$cervical.lfc)
 hump$thoracic.lfc <- as.numeric(hump$thoracic.lfc)
 hump$lumbar.lfc <- as.numeric(hump$lumbar.lfc)
-#hump <- hump %>% group_by(genename) %>% mutate_all(as.numeric)
 colnames(hump)[1] <- "symbol"
 hump <- hump %>% left_join(orto)
 hump <- hump[,2:5] %>% group_by(mouse) %>% summarise_all(mean)
@@ -22,7 +29,6 @@ rehump <- rehump %>% filter(mouse%in%unique(c(g4g2_up,g3g1_up)))
 rehump$group <- ifelse(rehump$mouse%in%inter,"inter",ifelse(rehump$mouse%in%g4g2_up, "g4g2_up", "g3g1_up"))
 rehump$group <- factor(rehump$group, levels = c("g4g2_up","inter","g3g1_up"))
 
-library(RColorBrewer)
 pdf(file = paste0("./output/human_comparison.pdf"), height = 4, width = 3) 
 ggplot(rehump, aes(x=variable, y=value, color = group)) + 
   ylab("Log 2 fold change (ALS patients vs controls)")+
